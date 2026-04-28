@@ -1,0 +1,18 @@
+{
+  "name": "taxsetu-puppeteer-filer",
+  "version": "1.0.0",
+  "description": "Browser automation for GST portal filing",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "puppeteer": "^23.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

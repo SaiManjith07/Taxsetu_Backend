@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mock GST Portal - GSTR-1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #020617; color: #f9fafb; }
+      header { background: #0d9488; padding: 12px 24px; }
+      header h1 { margin: 0; font-size: 18px; }
+      main { padding: 20px 24px; max-width: 900px; margin: 0 auto; }
+      h2 { font-size: 16px; margin: 16px 0 8px; color: #94a3b8; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 13px; }
+      th, td { border: 1px solid #1e293b; padding: 8px 10px; text-align: left; }
+      th { background: #1e3a5f; }
+      input[type='text'], input[type='number'] {
+        width: 100%; box-sizing: border-box; padding: 4px 8px; border-radius: 6px;
+        border: 1px solid #374151; background: #0f172a; color: #f9fafb;
+      }
+      .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin: 12px 0; }
+      .summary-box { background: #1e293b; border-radius: 8px; padding: 12px; }
+      .summary-box label { font-size: 11px; color: #94a3b8; display: block; }
+      .summary-box .val { font-size: 16px; font-weight: 600; }
+      button { background: #0d9488; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+      button:hover { background: #0faaa0; }
+      .filled-note { background: #134e4a; color: #5eead4; padding: 8px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>GSTR-1 – Details of outward supplies (Mock)</h1>
+    </header>
+    <main>
+      <div id="filled_note" class="filled-note" style="display: none;">Data auto-filled from TaxSetu. Verify and continue to GSTR-3B in the wizard.</div>
+      <h2>Summary (Table 3.1 equivalent)</h2>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <label>Total taxable value</label>
+          <div class="val" id="total_taxable">0</div>
+        </div>
+        <div class="summary-box">
+          <label>Total CGST</label>
+          <div class="val" id="total_cgst">0</div>
+        </div>
+        <div class="summary-box">
+          <label>Total SGST</label>
+          <div class="val" id="total_sgst">0</div>
+        </div>
+        <div class="summary-box">
+          <label>Total invoices</label>
+          <div class="val" id="total_invoices">0</div>
+        </div>
+      </div>
+      <h2>4A/4B/6B/6C – B2B, SEZ, DE (recipient-wise)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Recipient GSTIN</th>
+            <th>Trade name</th>
+            <th>Invoices</th>
+            <th>Taxable value</th>
+            <th>CGST</th>
+            <th>SGST</th>
+          </tr>
+        </thead>
+        <tbody id="b2b_tbody">
+          <tr><td colspan="6" class="text-slate-400">No B2B records</td></tr>
+        </tbody>
+      </table>
+      <h2>7 – B2C (Others) summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Taxable value</th>
+            <th>CGST</th>
+            <th>SGST</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input id="b2c_taxable" type="number" value="0" readonly /></td>
+            <td><input id="b2c_cgst" type="number" value="0" readonly /></td>
+            <td><input id="b2c_sgst" type="number" value="0" readonly /></td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size: 12px; color: #94a3b8;">Mock portal – not filed with GSTN. Use “Continue to GSTR-3B” in the wizard when done.</p>
+    </main>
+    <script>
+      function fmt(n) { return (n != null && n !== '') ? Number(n).toLocaleString('en-IN') : '0' }
+      function applyGSTR1(gstr1) {
+        if (!gstr1) return
+        var s = gstr1.summary || {}
+        document.getElementById('total_taxable').textContent = fmt(s.total_taxable_value)
+        document.getElementById('total_cgst').textContent = fmt(s.total_cgst)
+        document.getElementById('total_sgst').textContent = fmt(s.total_sgst)
+        document.getElementById('total_invoices').textContent = fmt(s.total_invoices)
+
+        var b2c = gstr1.b2c_others || {}
+        var el = function (id) { return document.getElementById(id) }
+        if (el('b2c_taxable')) el('b2c_taxable').value = b2c.taxable_value ?? 0
+        if (el('b2c_cgst')) el('b2c_cgst').value = b2c.cgst ?? 0
+        if (el('b2c_sgst')) el('b2c_sgst').value = b2c.sgst ?? 0
+
+        var tbody = document.getElementById('b2b_tbody')
+        var b2b = gstr1.b2b || []
+        if (b2b.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="color:#94a3b8">No B2B records</td></tr>'
+        } else {
+          tbody.innerHTML = b2b.map(function (r) {
+            return '<tr><td>' + (r.recipient_gstin || '') + '</td><td>' + (r.trade_name || '') + '</td><td>' + (r.invoice_count || 0) + '</td><td>' + fmt(r.taxable_value) + '</td><td>' + fmt(r.cgst) + '</td><td>' + fmt(r.sgst) + '</td></tr>'
+          }).join('')
+        }
+        var note = document.getElementById('filled_note')
+        if (note) note.style.display = 'block'
+      }
+      window.addEventListener('message', function (e) {
+        var d = e.data
+        if (!d || d.source !== 'taxsetu-wizard') return
+        if (d.gstr1) applyGSTR1(d.gstr1)
+      })
+    </script>
+  </body>
+</html>

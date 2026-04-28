@@ -1,0 +1,15 @@
+{
+  "name": "taxsetu-functions",
+  "description": "Firebase Cloud Functions for TaxSetu",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "@google-cloud/text-to-speech": "^6.4.0",
+    "@google/generative-ai": "^0.21.0",
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^5.0.0"
+  }
+}

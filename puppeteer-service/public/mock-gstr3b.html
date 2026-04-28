@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mock GST Portal - GSTR-3B</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #020617;
+        color: #f9fafb;
+      }
+      header {
+        background: #111827;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #1f2937;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 18px;
+      }
+      header span {
+        font-size: 12px;
+        color: #9ca3af;
+      }
+      main {
+        padding: 20px 32px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-size: 18px;
+        margin-top: 24px;
+        margin-bottom: 8px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 16px;
+      }
+      th,
+      td {
+        border: 1px solid #1f2937;
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+      th {
+        background: #111827;
+        text-align: left;
+      }
+      input[type='text'],
+      input[type='number'] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 4px 6px;
+        border-radius: 6px;
+        border: 1px solid #374151;
+        background: #020617;
+        color: #f9fafb;
+      }
+      input:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 1px #0ea5e9;
+      }
+      .actions-row {
+        margin-top: 12px;
+        display: flex;
+        justify-content: flex-end;
+      }
+      button {
+        border: none;
+        border-radius: 999px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .btn-save {
+        background: #0ea5e9;
+        color: #022c39;
+        margin-left: 8px;
+      }
+      .btn-save:hover {
+        background: #38bdf8;
+      }
+      .btn-evc {
+        background: #22c55e;
+        color: #022c22;
+      }
+      .btn-evc:hover {
+        background: #4ade80;
+      }
+      .evc-row {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      #arn_number {
+        margin-top: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #a5b4fc;
+      }
+      .filed-success {
+        display: none;
+        text-align: center;
+        padding: 48px 24px;
+      }
+      .filed-success.visible {
+        display: block;
+      }
+      .form-sections {
+        transition: opacity 0.2s;
+      }
+      body.filed .form-sections {
+        display: none;
+      }
+      .filed-success h2 {
+        margin-top: 0;
+        color: #22c55e;
+      }
+      nav {
+        background: #020617;
+        border-bottom: 1px solid #1f2937;
+        padding: 8px 24px;
+        font-size: 13px;
+        display: flex;
+        gap: 16px;
+      }
+      #returns_link {
+        color: #e5e7eb;
+        cursor: pointer;
+      }
+      #returns_link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>GSTR-3B &mdash; Mock Return</h1>
+        <span>Demo environment for TaxSetu filer &amp; guardian</span>
+      </div>
+      <span>Mock &bull; Not filed with GSTN</span>
+    </header>
+    <nav>
+      <span id="returns_link">Returns &gt; GSTR-3B</span>
+    </nav>
+    <main>
+      <div id="filed_success_card" class="filed-success">
+        <h2>Return filed successfully</h2>
+        <p id="filed_arn_display" class="text-lg font-semibold text-text-primary mt-2"></p>
+        <p class="text-sm text-text-secondary mt-2">Mock &bull; Not filed with GSTN</p>
+      </div>
+      <div class="form-sections">
+      <section>
+        <h2>Table 3.1 &mdash; Outward supplies</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Particulars</th>
+              <th>Taxable value</th>
+              <th>CGST</th>
+              <th>SGST</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Outward taxable supplies (other than zero rated, nil rated and exempted)</td>
+              <td><input id="table_3_1_taxable_value" type="number" value="0" /></td>
+              <td><input id="table_3_1_cgst" type="number" value="0" /></td>
+              <td><input id="table_3_1_sgst" type="number" value="0" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="actions-row">
+          <button id="table_3_1_save" class="btn-save" type="button">Save Table 3.1</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Table 4 &mdash; Eligible ITC</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Particulars</th>
+              <th>ITC CGST</th>
+              <th>ITC SGST</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Inputs</td>
+              <td><input id="table_4_itc_cgst" type="number" value="0" /></td>
+              <td><input id="table_4_itc_sgst" type="number" value="0" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="actions-row">
+          <button id="table_4_save" class="btn-save" type="button">Save Table 4</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Table 5 &mdash; Net tax payable</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Particulars</th>
+              <th>Net payable (CGST + SGST)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total tax liability after credit</td>
+              <td><input id="table_5_net_payable" type="number" value="0" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="actions-row">
+          <button id="table_5_save" class="btn-save" type="button">Save Table 5</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Submit with EVC</h2>
+        <div class="evc-row">
+          <button id="file_with_evc_btn" class="btn-evc" type="button">File with EVC</button>
+          <input id="evc_otp" type="text" placeholder="Enter EVC OTP" />
+          <button id="evc_submit_btn" class="btn-save" type="button">Submit OTP</button>
+        </div>
+        <div id="arn_number"></div>
+      </section>
+      </div>
+    </main>
+
+    <script>
+      window.open = function () { return null }
+      function showFiledState(arn) {
+        document.body.classList.add('filed')
+        var card = document.getElementById('filed_success_card')
+        var display = document.getElementById('filed_arn_display')
+        if (card) card.classList.add('visible')
+        if (display) display.textContent = 'ARN: ' + (arn || document.getElementById('arn_number').innerText || '—')
+      }
+
+      function doSubmitAndGetArn() {
+        var arn = 'ARN-MOCK-' + Date.now().toString().slice(-6)
+        document.getElementById('arn_number').textContent = 'Acknowledgement Reference Number: ' + arn
+        showFiledState(arn)
+        try {
+          window.parent.postMessage({ source: 'gst-portal-mock', arn: arn }, '*')
+        } catch (err) {}
+      }
+
+      window.addEventListener('message', function (e) {
+        var d = e.data
+        if (!d || d.source !== 'taxsetu-wizard') return
+        if (d.triggerSubmit) {
+          doSubmitAndGetArn()
+          return
+        }
+        if (d.filed && d.arn) {
+          showFiledState(d.arn)
+          return
+        }
+        var t31 = d.table_3_1 || {}
+        var t4 = d.table_4 || {}
+        var t5 = d.table_5 || {}
+        var el = function (id) { return document.getElementById(id) }
+        if (el('table_3_1_taxable_value')) el('table_3_1_taxable_value').value = t31.taxable_value ?? ''
+        if (el('table_3_1_cgst')) el('table_3_1_cgst').value = t31.cgst ?? ''
+        if (el('table_3_1_sgst')) el('table_3_1_sgst').value = t31.sgst ?? ''
+        if (el('table_4_itc_cgst')) el('table_4_itc_cgst').value = t4.itc_cgst ?? ''
+        if (el('table_4_itc_sgst')) el('table_4_itc_sgst').value = t4.itc_sgst ?? ''
+        if (el('table_5_net_payable')) el('table_5_net_payable').value = t5.net_payable ?? ''
+      })
+
+      document.getElementById('file_with_evc_btn').addEventListener('click', function () {})
+
+      document.getElementById('evc_submit_btn').addEventListener('click', function () {
+        doSubmitAndGetArn()
+      })
+    </script>
+  </body>
+  </html>
+

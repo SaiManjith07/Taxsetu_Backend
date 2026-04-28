@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Frontend & apps – keep only backend in this repo
+frontend/
+taxsetu_app/
+taxsetu_web/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Build and logs
+dist/
+dist-ssr/
+*.log
+npm-debug.log*
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
